@@ -8,17 +8,16 @@
 <body>
     <h1>Добро пожаловать в личный кинотеатр!</h1>
 
-    <script>
-        // 1. Запрашиваем у пользователя количество просмотренных фильмов
+   
+</body>
+</html> <script>
         const numberOfFilms = prompt('Сколько фильмов вы уже посмотрели?');
 
-        // 2. Создаем объект personalMovieDB
         const personalMovieDB = {
             count: numberOfFilms,
             movies: {}
         };
 
-        // 3. Запрашиваем информацию о фильмах
         for (let i = 0; i < 2; i++) {
             let movieName;
             let movieRating;
@@ -27,26 +26,22 @@
                 movieName = prompt('Один из последних просмотренных фильмов?');
                 if (movieName === null || movieName.trim() === '' || movieName.length > 50) {
                     alert('Пожалуйста, введите корректное название фильма (не пустое и не длиннее 50 символов).');
-                    continue; // Возвращаем пользователя к вопросу
+                    continue; 
                 }
-                break; // Если все условия выполнены, выходим из цикла
+                break;
             }
 
             while (true) {
                 movieRating = prompt('На сколько оцените его?');
                 if (movieRating === null || movieRating.trim() === '') {
                     alert('Пожалуйста, введите оценку.');
-                    continue; // Возвращаем пользователя к вопросу
+                    continue;
                 }
-                break; // Если все условия выполнены, выходим из цикла
+                break;
             }
 
-            // 5. Записываем ответы в объект movies
             personalMovieDB.movies[movieName] = movieRating;
         }
 
-        // 6. Выводим объект personalMovieDB в консоль
         console.log(personalMovieDB);
     </script>
-</body>
-</html>
