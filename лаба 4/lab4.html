@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirt Store</title>
+    <style>
+        .shirt-card {
+            border: 1px solid #ccc;
+            padding: 16px;
+            margin: 16px;
+            display: inline-block;
+            width: 200px;
+        }
+        .shirt-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="shirt-container"></div>
+<button id="see-page">Подробнее</button>
+
+<script src="shirts.js"></script>
+<script>
+    function generateShirtContent() {
+    const container = document.getElementById('shirt-container');
+
+    shirts.forEach(shirt => {
+        const card = document.createElement('div');
+        card.className = 'shirt-card';
+
+        const shirtName = shirt.name || 'Unnamed Shirt';
+        const shirtDescription = shirt.description || 'No description available.';
+        const shirtPrice = shirt.price || 'Price not available';
+
+        const nameElement = document.createElement('h3');
+        nameElement.textContent = shirtName;
+
+        const descriptionElement = document.createElement('p');
+        descriptionElement.textContent = shirtDescription;
+
+        const priceElement = document.createElement('p');
+        priceElement.textContent = shirtPrice;
+
+        // Отображение изображения белой майки
+        const frontImageSrc = shirt.colors["white"].front || shirt.default.front;
+        
+        const frontImage = document.createElement('img');
+        frontImage.src = frontImageSrc;
+        frontImage.alt = `${shirtName} - Front (white)`;
+        frontImage.className = 'shirt-image';
+
+        card.appendChild(frontImage);
+
+        // Создание кнопки
+        /*const buttonElement = document.createElement('button');
+        buttonElement.textContent = 'Подробнее';
+        buttonElement.onclick = function() {
+            alert(`Подробнее о ${shirtName}: ${shirtDescription}`);
+        };*/
+        const buttonElement = document.createElement('button');
+        buttonElement.textContent = 'Подробнее';
+        buttonElement.onclick = function() {
+        const index = shirts.indexOf(shirt); // Получаем индекс текущей майки
+        window.location.href = `shirt-detail.html?shirtIndex=${index}`; // Перенаправляем на страницу деталей
+};
+
+        // Добавление элементов в карточку
+        card.appendChild(nameElement);
+        card.appendChild(descriptionElement);
+        card.appendChild(priceElement);
+        card.appendChild(buttonElement); // Добавляем кнопку под майкой
+
+        container.appendChild(card);
+    });
+}
+
+
+generateShirtContent();
+</script>
+
+</body>
+</html>

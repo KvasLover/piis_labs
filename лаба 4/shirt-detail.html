@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirt Detail</title>
+    <style>
+        .shirt-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .color-button {
+            margin: 5px;
+        }
+        .side-button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="shirt-detail-container"></div>
+
+<script src="shirts.js"></script>
+<script>
+    function getShirtFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const shirtIndex = urlParams.get('shirtIndex');
+        return shirts[shirtIndex];
+    }
+
+    function displayShirtDetail() {
+        const shirt = getShirtFromURL();
+        const container = document.getElementById('shirt-detail-container');
+
+        if (!shirt) {
+            container.innerHTML = '<h2>Shirt not found</h2>';
+            return;
+        }
+
+        const nameElement = document.createElement('h3');
+        nameElement.textContent = shirt.name;
+
+        const shirtImage = document.createElement('img');
+        shirtImage.src = shirt.colors["white"].front || shirt.default.front;
+        shirtImage.alt = `${shirt.name} - Front (white)`;
+        shirtImage.className = 'shirt-image';
+
+        let currentSide = 'front'; 
+        let currentColor = 'white';
+
+        const frontButton = document.createElement('button');
+        frontButton.textContent = 'Показать спереди';
+        frontButton.className = 'side-button';
+        
+        const backButton = document.createElement('button');
+        backButton.textContent = 'Показать сзади';
+        backButton.className = 'side-button';      
+        
+
+
+        const colorButtonsContainer = document.createElement('div');
+
+        Object.keys(shirt.colors).forEach(color => {
+            const button = document.createElement('button');
+            button.textContent = color.charAt(0).toUpperCase() + color.slice(1);
+            button.className = 'color-button';
+            button.onclick = () => {
+                currentColor = color;
+                if (currentSide === 'back') {
+                    shirtImage.src = shirt.colors[color].back; 
+                } else {
+                    shirtImage.src = shirt.colors[color].front; 
+                }
+            };
+            colorButtonsContainer.appendChild(button);
+        });
+
+        backButton.onclick = () => {
+            shirtImage.src = shirt.colors[currentColor].back || shirt.default.back;
+            currentSide = 'back'; 
+        };
+
+        frontButton.onclick = () => {
+            shirtImage.src = shirt.colors[currentColor].front || shirt.default.front;
+            currentSide = 'front'; 
+        };
+        
+
+        container.appendChild(nameElement);
+        container.appendChild(shirtImage);
+        
+        container.appendChild(frontButton);
+        container.appendChild(backButton);
+        
+        container.appendChild(colorButtonsContainer);
+    }
+
+    displayShirtDetail();
+</script>
+
+</body>
+</html>
