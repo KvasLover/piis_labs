@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirt Store</title>
+    <style>
+        .shirt-card {
+            border: 1px solid #ccc;
+            padding: 16px;
+            margin: 16px;
+            display: inline-block;
+            width: 200px;
+        }
+        .shirt-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="shirt-container"></div>
+<button id="see-page">See Page</button>
+
+<script src="shirts.js"></script>
+<script>
+    function generateShirtContent() {
+        const container = document.getElementById('shirt-container');
+
+        shirts.forEach(shirt => {
+            // Создаем карточку для каждой майки
+            const card = document.createElement('div');
+            card.className = 'shirt-card';
+
+            // Проверяем наличие имени
+            const shirtName = shirt.name || 'Unnamed Shirt';
+            const shirtDescription = shirt.description || 'No description available.';
+            const shirtPrice = shirt.price || 'Price not available';
+
+            // Создаем элементы для имени, описания и цены
+            const nameElement = document.createElement('h3');
+            nameElement.textContent = shirtName;
+
+            const descriptionElement = document.createElement('p');
+            descriptionElement.textContent = shirtDescription;
+
+            const priceElement = document.createElement('p');
+            priceElement.textContent = shirtPrice;
+
+            // Добавляем изображения
+            const colorKeys = Object.keys(shirt.colors);
+            if (colorKeys.length > 0) {
+                colorKeys.forEach(color => {
+                    const frontImageSrc = shirt.colors[color].front || shirt.default.front;
+                    const backImageSrc = shirt.colors[color].back || shirt.default.back;
+
+                    // Создаем элементы изображений
+                    const frontImage = document.createElement('img');
+                    frontImage.src = frontImageSrc;
+                    frontImage.alt = `${shirtName} - Front (${color})`;
+                    frontImage.className = 'shirt-image';
+
+                    const backImage = document.createElement('img');
+                    backImage.src = backImageSrc;
+                    backImage.alt = `${shirtName} - Back (${color})`;
+                    backImage.className = 'shirt-image';
+
+                    // Добавляем изображения в карточку
+                    card.appendChild(frontImage);
+                    card.appendChild(backImage);
+                });
+            } else {
+                // Если нет доступных цветов, используем изображения по умолчанию
+                const defaultFrontImage = document.createElement('img');
+                defaultFrontImage.src = shirt.default.front;
+                defaultFrontImage.alt = `${shirtName} - Default Front`;
+                defaultFrontImage.className = 'shirt-image';
+
+                const defaultBackImage = document.createElement('img');
+                defaultBackImage.src = shirt.default.back;
+                defaultBackImage.alt = `${shirtName} - Default Back`;
+                defaultBackImage.className = 'shirt-image';
+
+                card.appendChild(defaultFrontImage);
+                card.appendChild(defaultBackImage);
+            }
+
+            // Добавляем элементы в карточку
+            card.appendChild(nameElement);
+            card.appendChild(descriptionElement);
+            card.appendChild(priceElement);
+
+            // Добавляем карточку в контейнер
+            container.appendChild(card);
+        });
+    }
+
+    // Вызов функции генерации контента
+    generateShirtContent();
+</script>
+
+</body>
+</html>
