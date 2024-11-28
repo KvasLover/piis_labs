@@ -2,31 +2,52 @@
 const targets = document.querySelectorAll('.target');
 
 // Переменные для хранения состояния перетаскивания
-let isDragging = false;
-let isPinned = false;
-let currentElement = null;
-let offsetX, offsetY;
-let originalPosition = {};
+let isDragging = false; // Флаг для отслеживания перетаскивания
+let isPinned = false; // Флаг для отслеживания режима "следующий за пальцем"
+let currentElement = null; // Текущий элемент
+let offsetX, offsetY; // Смещения
+let originalPosition = {}; // Исходные позиции
 
 // Функция для начала перетаскивания
 function startDrag(event) {
     if (isPinned) return; // Если элемент прикреплен, не начинаем перетаскивание
 
     isDragging = true;
-    currentElement = event.target;
+    
+    // Проверяем, был ли клик на элементе или вне его
+    if (event.target.classList.contains('target')) {
+        currentElement = event.target;
 
-    // Сохраняем начальную позицию
-    originalPosition = {
-        top: currentElement.offsetTop,
-        left: currentElement.offsetLeft
-    };
+        // Сохраняем начальную позицию
+        originalPosition = {
+            top: currentElement.offsetTop,
+            left: currentElement.offsetLeft
+        };
 
-    // Вычисляем смещение курсора относительно элемента
-    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+        // Вычисляем смещение курсора относительно элемента
+        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
-    offsetX = clientX - currentElement.getBoundingClientRect().left;
-    offsetY = clientY - currentElement.getBoundingClientRect().top;
+        offsetX = clientX - currentElement.getBoundingClientRect().left;
+        offsetY = clientY - currentElement.getBoundingClientRect().top;
+    } else {
+        // Если касание произошло вне элемента, "телепортируем" его к пальцу
+        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+        currentElement = targets[0]; // Здесь можно выбрать любой элемент или добавить логику выбора
+        currentElement.style.left = `${clientX}px`;
+        currentElement.style.top = `${clientY}px`;
+
+        // Сохраняем начальную позицию после телепортации
+        originalPosition = {
+            top: clientY,
+            left: clientX
+        };
+
+        offsetX = 0; // Обнуляем смещения, так как мы телепортировались
+        offsetY = 0;
+    }
 
     // Добавляем обработчики движения мыши и касания
     document.addEventListener('mousemove', drag);
