@@ -13,7 +13,7 @@ function startDrag(event) {
     if (isPinned) return; // Если элемент прикреплен, не начинаем перетаскивание
 
     isDragging = true;
-    
+
     // Проверяем, был ли клик на элементе или вне его
     if (event.target.classList.contains('target')) {
         currentElement = event.target;
@@ -35,7 +35,8 @@ function startDrag(event) {
         const clientX = event.touches ? event.touches[0].clientX : event.clientX;
         const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
-        currentElement = targets[0]; // Здесь можно выбрать любой элемент или добавить логику выбора
+        // Выбираем первый элемент для телепортации (можно улучшить логику выбора)
+        currentElement = targets[0]; 
         currentElement.style.left = `${clientX}px`;
         currentElement.style.top = `${clientY}px`;
 
