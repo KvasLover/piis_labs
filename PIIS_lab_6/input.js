@@ -31,23 +31,7 @@ function startDrag(event) {
         offsetX = clientX - currentElement.getBoundingClientRect().left;
         offsetY = clientY - currentElement.getBoundingClientRect().top;
     } else {
-        // Если касание произошло вне элемента, "телепортируем" его к пальцу
-        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-
-        // Выбираем первый элемент для телепортации (можно улучшить логику выбора)
-        currentElement = targets[0]; 
-        currentElement.style.left = `${clientX}px`;
-        currentElement.style.top = `${clientY}px`;
-
-        // Сохраняем начальную позицию после телепортации
-        originalPosition = {
-            top: clientY,
-            left: clientX
-        };
-
-        offsetX = 0; // Обнуляем смещения, так как мы телепортировались
-        offsetY = 0;
+        // Если касание произошло вне элемента, ничего не делаем, так как это обычное перетаскивание
     }
 
     // Добавляем обработчики движения мыши и касания
@@ -103,6 +87,29 @@ function pinDrag(event) {
     currentElement.style.top = `${clientY - offsetY}px`;
 }
 
+// Функция для обработки двойного касания и перехода в режим следования
+function handleDoubleTouch(event) {
+    if (event.touches.length === 2) {  // Проверяем, что два пальца на экране
+        isPinned = true;  // Включаем режим следования
+
+        const clientX = event.touches[0].clientX;  // Получаем координаты первого касания
+        const clientY = event.touches[0].clientY;
+
+        // Телепортируем элемент к месту касания (например, к первому элементу)
+        currentElement = targets[0];  // Здесь можно выбрать любой элемент или добавить логику выбора
+        currentElement.style.left = `${clientX}px`;
+        currentElement.style.top = `${clientY}px`;
+
+        originalPosition.top = clientY;  // Сохраняем новую позицию как исходную
+        originalPosition.left = clientX;
+        
+        offsetX = 0;  // Обнуляем смещения, так как мы телепортировались
+        offsetY = 0;
+
+        document.addEventListener('touchmove', pinDrag);  // Добавляем обработчик перемещения для режима следования
+    }
+}
+
 // Функция для обработки нажатия клавиши Esc или второго пальца
 function handleKeydown(event) {
     if (event.key === 'Escape' || (event.touches && event.touches.length > 1)) {
@@ -125,12 +132,13 @@ targets.forEach(target => {
     target.addEventListener('touchstart', (event) => {
         startDrag(event); // Начинаем перетаскивание при касании
         event.preventDefault(); // Предотвращаем стандартное поведение браузера
+        
+        handleDoubleTouch(event);  // Обрабатываем двойное касание при каждом touchstart 
     });
-    
+
     target.addEventListener('mouseup', endDrag); // Для мыши
     target.addEventListener('touchend', endDrag); // Завершение перетаскивания при отпускании пальца
     
-    target.addEventListener('dblclick', pinElement); // Для мыши и двойного касания на сенсорных экранах
 });
 
 // Обработчик нажатия клавиш и касаний для клавиатуры и сенсорного экрана
