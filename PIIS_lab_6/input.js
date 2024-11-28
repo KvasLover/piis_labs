@@ -14,7 +14,7 @@ function startDrag(event) {
 
     isDragging = true;
 
-    // Проверяем, был ли клик на элементе или вне его
+    
     
         currentElement = event.target;
 
