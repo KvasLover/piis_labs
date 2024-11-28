@@ -15,7 +15,7 @@ function startDrag(event) {
     isDragging = true;
 
     // Проверяем, был ли клик на элементе или вне его
-    if (event.target.classList.contains('target')) {
+    
         currentElement = event.target;
 
         // Сохраняем начальную позицию
@@ -30,9 +30,7 @@ function startDrag(event) {
 
         offsetX = clientX - currentElement.getBoundingClientRect().left;
         offsetY = clientY - currentElement.getBoundingClientRect().top;
-    } else {
-        // Если касание произошло вне элемента, ничего не делаем, так как это обычное перетаскивание
-    }
+    
 
     // Добавляем обработчики движения мыши и касания
     document.addEventListener('mousemove', drag);
