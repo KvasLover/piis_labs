@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8 - Canvas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body> 
+    <div class="shape-selection">
+        <label>
+            <input type="radio" name="shape" value="circle" checked> Круг
+        </label>
+        <label>
+            <input type="radio" name="shape" value="rectangle"> Прямоугольник
+        </label>
+    </div>
+
+    <h2>SVG</h2>      
+    <svg width="800" height="400" id="svg"></svg>
+    
+    <h2>CANVAS</h2>    
+    <canvas id="drawingCanvas" width="800" height="400"></canvas>
+
+
+    <script type="module" src="canvas.js"></script>
+    <script type="module" src="svg.js"></script>
+</body>
+</html>
